@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go Setup - Professional Boilerplate</title>
+    <style>
+      :root {
+        --color-primary: #00d4aa;
+        --color-primary-hover: #00c99f;
+        --color-background: #0f0f0f;
+        --color-surface: #1a1a1a;
+        --color-text: #e0e0e0;
+        --color-text-secondary: #a0a0a0;
+        --color-border: #333;
+        --color-success: #4ade80;
+        --color-error: #ff6b6b;
+        --color-warning: #fbbf24;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-text);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        background: linear-gradient(135deg, #00d4aa 0%, #009e89 100%);
+        padding: 30px 0;
+        margin-bottom: 40px;
+        border-bottom: 3px solid var(--color-primary);
+      }
+
+      header h1 {
+        color: white;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      header p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.1em;
+      }
+
+      .content-wrapper {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+
+      .sidebar {
+        background-color: var(--color-surface);
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid var(--color-border);
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+      }
+
+      .file-nav {
+        list-style: none;
+      }
+
+      .file-nav li {
+        margin-bottom: 8px;
+      }
+
+      .file-nav button {
+        width: 100%;
+        padding: 10px 12px;
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--color-text);
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: left;
+        font-size: 0.9em;
+        transition: all 0.3s;
+      }
+
+      .file-nav button:hover {
+        background-color: var(--color-border);
+        color: var(--color-primary);
+      }
+
+      .file-nav button.active {
+        background-color: var(--color-primary);
+        color: var(--color-background);
+        font-weight: 600;
+      }
+
+      .main-content {
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .file-header {
+        background-color: #242424;
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .file-header h2 {
+        font-size: 1.1em;
+        color: var(--color-primary);
+        margin: 0;
+      }
+
+      .copy-btn {
+        background-color: var(--color-primary);
+        color: var(--color-background);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s;
+      }
+
+      .copy-btn:hover {
+        background-color: var(--color-primary-hover);
+      }
+
+      .copy-btn.copied {
+        background-color: var(--color-success);
+      }
+
+      .file-content {
+        padding: 20px;
+        overflow-x: auto;
+        max-height: 600px;
+        overflow-y: auto;
+      }
+
+      pre {
+        background-color: #0f0f0f;
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid var(--color-border);
+        overflow-x: auto;
+        font-family: "Courier New", monospace;
+        font-size: 0.85em;
+      }
+
+      code {
+        color: #58c4dc;
+      }
+
+      .keyword {
+        color: #ff6b9d;
+      }
+
+      .string {
+        color: #c3e88d;
+      }
+
+      .comment {
+        color: #546e7a;
+      }
+
+      .function {
+        color: #89ddff;
+      }
+
+      .tab-navigation {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        padding: 10px 20px;
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        color: var(--color-text);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 500;
+      }
+
+      .tab-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+      }
+
+      .tab-btn.active {
+        background-color: var(--color-primary);
+        color: var(--color-background);
+        border-color: var(--color-primary);
+      }
+
+      .section {
+        display: none;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .feature-card {
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.3s;
+      }
+
+      .feature-card:hover {
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
+      }
+
+      .feature-card h3 {
+        color: var(--color-primary);
+        margin-bottom: 10px;
+        font-size: 1.1em;
+      }
+
+      .feature-card p {
+        color: var(--color-text-secondary);
+        font-size: 0.9em;
+        margin: 0;
+      }
+
+      .setup-guide {
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 30px;
+        margin-bottom: 30px;
+      }
+
+      .setup-guide ol {
+        margin-left: 20px;
+      }
+
+      .setup-guide li {
+        margin-bottom: 15px;
+        color: var(--color-text-secondary);
+      }
+
+      .setup-guide code {
+        background-color: #0f0f0f;
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: #58c4dc;
+        font-family: "Courier New", monospace;
+      }
+
+      .command-box {
+        background-color: #0f0f0f;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        padding: 15px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+        color: #58c4dc;
+        overflow-x: auto;
+      }
+
+      .highlight-section {
+        background-color: rgba(0, 212, 170, 0.1);
+        border-left: 4px solid var(--color-primary);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+
+      .interview-tips {
+        background-color: rgba(74, 222, 128, 0.1);
+        border: 1px solid var(--color-success);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .interview-tips h3 {
+        color: var(--color-success);
+        margin-bottom: 10px;
+      }
+
+      .interview-tips ul {
+        margin-left: 20px;
+        color: var(--color-text-secondary);
+      }
+
+      .interview-tips li {
+        margin-bottom: 8px;
+      }
+
+      @media (max-width: 768px) {
+        .content-wrapper {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: static;
+        }
+
+        header h1 {
+          font-size: 1.8em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>🚀 go-setup</h1>
+        <p>Professional Golang API Boilerplate with Clean Architecture</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab('overview')">
+          📋 Overview
+        </button>
+        <button class="tab-btn" onclick="switchTab('structure')">
+          📁 Project Structure
+        </button>
+        <button class="tab-btn" onclick="switchTab('setup')">
+          ⚙️ Setup Guide
+        </button>
+        <button class="tab-btn" onclick="switchTab('files')">
+          📄 Code Files
+        </button>
+        <button class="tab-btn" onclick="switchTab('testing')">
+          ✅ Testing Guide
+        </button>
+      </div>
+
+      <!-- OVERVIEW TAB -->
+      <div id="overview" class="section active">
+        <h2>Project Overview</h2>
+        <p>
+          A professional, production-ready Golang boilerplate for 90-minute API
+          development interviews. Built with clean architecture principles and
+          comprehensive testing.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>✨ Clean Architecture</h3>
+            <p>
+              Hexagonal architecture with clear separation of concerns and
+              dependency inversion.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>🗄️ PostgreSQL Ready</h3>
+            <p>
+              Complete PostgreSQL integration with migrations and parameterized
+              queries.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>🎯 Gin Framework</h3>
+            <p>Fast HTTP router with middleware support and validation.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🧪 Unit Testing</h3>
+            <p>Comprehensive test suite with mocks and table-driven tests.</p>
+          </div>
+          <div class="feature-card">
+            <h3>⚡ Dependency Injection</h3>
+            <p>Manual DI pattern for testability and flexibility.</p>
+          </div>
+          <div class="feature-card">
+            <h3>📦 Error Handling</h3>
+            <p>Custom error types with proper HTTP status code mapping.</p>
+          </div>
+        </div>
+
+        <div class="interview-tips">
+          <h3>💡 Interview Tips</h3>
+          <ul>
+            <li>
+              <strong>Explain Architecture:</strong> Be ready to explain why
+              clean architecture matters for scalability and testability
+            </li>
+            <li>
+              <strong>Dependency Injection:</strong> Explain how interfaces
+              enable testing without external dependencies
+            </li>
+            <li>
+              <strong>Error Handling:</strong> Show proper error handling
+              patterns and status code mappings
+            </li>
+            <li>
+              <strong>Testing Strategy:</strong> Demonstrate unit tests covering
+              happy path, edge cases, and error scenarios
+            </li>
+            <li>
+              <strong>Database Design:</strong> Show understanding of migrations
+              and parameterized queries (SQL injection prevention)
+            </li>
+            <li>
+              <strong>Scalability:</strong> Discuss horizontal scaling, caching
+              strategies, and rate limiting (mention your experience at Gojek!)
+            </li>
+            <li>
+              <strong>Code Quality:</strong> Use meaningful variable names,
+              comments for complex logic, and consistent formatting
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- STRUCTURE TAB -->
+      <div id="structure" class="section">
+        <h2>Project Directory Structure</h2>
+        <pre><code>go-setup/
+├── cmd/
+│   └── main.go                          # Entry point
+│
+├── internal/
+│   ├── entity/
+│   │   └── user.go                      # Core domain model
+│   │
+│   ├── repository/
+│   │   ├── user_repository.go           # Interface (contract)
+│   │   └── postgres/
+│   │       └── user_repo.go             # PostgreSQL impl
+│   │
+│   ├── usecase/
+│   │   └── user_usecase.go              # Business logic
+│   │
+│   ├── delivery/
+│   │   ├── http/
+│   │   │   └── user_handler.go          # HTTP handlers
+│   │   └── middleware.go                 # Middlewares
+│   │
+│   ├── config/
+│   │   └── config.go                    # Configuration
+│   │
+│   └── database/
+│       └── database.go                  # DB connection
+│
+├── pkg/
+│   ├── errors/
+│   │   └── errors.go                    # Error types
+│   │
+│   └── response/
+│       └── response.go                  # Response format
+│
+├── migrations/
+│   └── 001_create_users_table.sql       # DB migrations
+│
+├── tests/
+│   ├── unit/
+│   │   ├── user_handler_test.go
+│   │   └── user_usecase_test.go
+│   │
+│   └── mocks/
+│       └── mock_user_repo.go
+│
+├── go.mod
+├── go.sum
+├── Makefile
+├── .env.example
+├── docker-compose.yml
+└── README.md</code></pre>
+
+        <div class="highlight-section">
+          <strong>Why This Structure?</strong>
+          <ul style="margin-left: 20px; margin-top: 10px">
+            <li>
+              <code>cmd/</code> - Single responsibility: application bootstrap
+            </li>
+            <li>
+              <code>internal/</code> - Encapsulation: prevents external imports
+            </li>
+            <li>
+              <code>entity/</code> - Core business models (framework-agnostic)
+            </li>
+            <li><code>repository/</code> - Database abstraction layer</li>
+            <li><code>usecase/</code> - Business logic orchestration</li>
+            <li>
+              <code>delivery/</code> - HTTP layer (easily replaceable with gRPC)
+            </li>
+            <li>
+              <code>pkg/</code> - Shared utilities (could be public packages)
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SETUP TAB -->
+      <div id="setup" class="section">
+        <div class="setup-guide">
+          <h2>Quick Start Setup (90 Minutes)</h2>
+
+          <h3>Step 1: Initialize Project</h3>
+          <div class="command-box">
+            $ mkdir go-setup && cd go-setup $ go mod init
+            github.com/yourname/go-setup
+          </div>
+
+          <h3>Step 2: Install Dependencies</h3>
+          <div class="command-box">
+            $ go get github.com/gin-gonic/gin $ go get github.com/lib/pq $ go
+            get github.com/joho/godotenv $ go get github.com/stretchr/testify
+          </div>
+
+          <h3>Step 3: Set Up PostgreSQL with Docker</h3>
+          <div class="command-box">$ docker-compose up -d</div>
+          <p style="color: var(--color-text-secondary); font-size: 0.9em">
+            Uses provided docker-compose.yml with PostgreSQL 15
+          </p>
+
+          <h3>Step 4: Run Migrations</h3>
+          <div class="command-box">
+            $ psql -h localhost -U postgres -d go_setup_db -f
+            migrations/001_create_users_table.sql
+          </div>
+
+          <h3>Step 5: Create .env File</h3>
+          <div class="command-box">
+            DB_HOST=localhost DB_PORT=5432 DB_USER=postgres DB_PASSWORD=postgres
+            DB_NAME=go_setup_db DB_SSLMODE=disable GIN_MODE=debug PORT=8080
+          </div>
+
+          <h3>Step 6: Run Application</h3>
+          <div class="command-box">$ go run cmd/main.go</div>
+
+          <h3>Step 7: Test Endpoints</h3>
+          <div class="command-box">
+            # Create user $ curl -X POST http://localhost:8080/api/users \ -H
+            "Content-Type: application/json" \ -d '{"name":"John
+            Doe","email":"john@example.com"}' # Get user $ curl
+            http://localhost:8080/api/users/1 # List users $ curl
+            http://localhost:8080/api/users
+          </div>
+
+          <h3>Step 8: Run Tests</h3>
+          <div class="command-box">
+            $ go test ./tests/unit/... -v $ go test ./tests/unit/... -coverage
+          </div>
+
+          <h3>Step 9: Build Docker Image</h3>
+          <div class="command-box">
+            $ docker build -t go-setup:latest . $ docker run -p 8080:8080
+            go-setup:latest
+          </div>
+        </div>
+
+        <div class="interview-tips">
+          <h3>⏱️ Time Management for Interview</h3>
+          <ul>
+            <li>
+              <strong>0-10 min:</strong> Project initialization, explain
+              architecture (draw it if possible)
+            </li>
+            <li>
+              <strong>10-30 min:</strong> Setup database connection, write
+              migrations
+            </li>
+            <li>
+              <strong>30-50 min:</strong> Implement entity, repository, and
+              usecase layers
+            </li>
+            <li>
+              <strong>50-70 min:</strong> Create HTTP handlers and middleware
+            </li>
+            <li><strong>70-85 min:</strong> Write unit tests with mocks</li>
+            <li>
+              <strong>85-90 min:</strong> Demo, explain code, discuss
+              improvements
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FILES TAB -->
+      <div id="files" class="section">
+        <h2>Code Files</h2>
+        <p>Click on a file to view its complete implementation:</p>
+
+        <div class="content-wrapper">
+          <div class="sidebar">
+            <h3 style="margin-bottom: 15px; color: var(--color-primary)">
+              Files
+            </h3>
+            <ul class="file-nav">
+              <li>
+                <button class="active" onclick="showFile('main')">
+                  cmd/main.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('entity')">entity/user.go</button>
+              </li>
+              <li>
+                <button onclick="showFile('repo-interface')">
+                  repository/user_repository.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('repo-postgres')">
+                  postgres/user_repo.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('usecase')">
+                  usecase/user_usecase.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('handler')">
+                  handler/user_handler.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('config')">config/config.go</button>
+              </li>
+              <li>
+                <button onclick="showFile('database')">
+                  database/database.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('errors')">errors/errors.go</button>
+              </li>
+              <li>
+                <button onclick="showFile('response')">
+                  response/response.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('handler-test')">
+                  handler_test.go
+                </button>
+              </li>
+              <li>
+                <button onclick="showFile('mock')">mock_user_repo.go</button>
+              </li>
+              <li>
+                <button onclick="showFile('migration')">migration.sql</button>
+              </li>
+              <li><button onclick="showFile('makefile')">Makefile</button></li>
+              <li>
+                <button onclick="showFile('docker-compose')">
+                  docker-compose.yml
+                </button>
+              </li>
+              <li><button onclick="showFile('gomod')">go.mod</button></li>
+            </ul>
+          </div>
+
+          <div class="main-content">
+            <!-- File: main.go -->
+            <div id="main" class="file-view">
+              <div class="file-header">
+                <h2>cmd/main.go</h2>
+                <button class="copy-btn" onclick="copyFile('main')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> main
+
+<span class="keyword">import</span> (
+    <span class="string">"log"</span>
+    <span class="string">"os"</span>
+
+    <span class="string">"github.com/gin-gonic/gin"</span>
+    <span class="string">"github.com/joho/godotenv"</span>
+    
+    <span class="string">"github.com/yourname/go-setup/internal/config"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/database"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/delivery/http"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/repository/postgres"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/usecase"</span>
+)
+
+<span class="keyword">func</span> <span class="function">main</span>() {
+    <span class="comment">// Load environment variables</span>
+    <span class="keyword">if</span> <span class="keyword">err</span> := godotenv.<span class="function">Load</span>(); <span class="keyword">err</span> != nil {
+        log.<span class="function">Println</span>(<span class="string">"No .env file found, using system env"</span>)
+    }
+
+    <span class="comment">// Load configuration</span>
+    cfg := config.<span class="function">Load</span>()
+
+    <span class="comment">// Initialize database</span>
+    db, <span class="keyword">err</span> := database.<span class="function">NewConnection</span>(cfg)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        log.<span class="function">Fatalf</span>(<span class="string">"Failed to connect database: %v"</span>, <span class="keyword">err</span>)
+    }
+    <span class="keyword">defer</span> db.<span class="function">Close</span>()
+
+    <span class="comment">// Initialize repositories (dependency injection)</span>
+    userRepo := postgres.<span class="function">NewUserRepository</span>(db)
+
+    <span class="comment">// Initialize use cases</span>
+    userUC := usecase.<span class="function">NewUserUsecase</span>(userRepo)
+
+    <span class="comment">// Initialize Gin router</span>
+    router := gin.<span class="function">Default</span>()
+
+    <span class="comment">// Add middleware</span>
+    router.<span class="function">Use</span>(http.<span class="function">CORSMiddleware</span>())
+    router.<span class="function">Use</span>(http.<span class="function">ErrorHandlingMiddleware</span>())
+
+    <span class="comment">// Initialize handlers</span>
+    userHandler := http.<span class="function">NewUserHandler</span>(userUC)
+
+    <span class="comment">// Register routes</span>
+    api := router.<span class="function">Group</span>(<span class="string">"/api"</span>)
+    {
+        users := api.<span class="function">Group</span>(<span class="string">"/users"</span>)
+        {
+            users.<span class="function">POST</span>(<span class="string">""</span>, userHandler.<span class="function">CreateUser</span>)
+            users.<span class="function">GET</span>(<span class="string">""</span>, userHandler.<span class="function">GetUsers</span>)
+            users.<span class="function">GET</span>(<span class="string">"/:id"</span>, userHandler.<span class="function">GetUserByID</span>)
+            users.<span class="function">PUT</span>(<span class="string">"/:id"</span>, userHandler.<span class="function">UpdateUser</span>)
+            users.<span class="function">DELETE</span>(<span class="string">"/:id"</span>, userHandler.<span class="function">DeleteUser</span>)
+        }
+    }
+
+    <span class="comment">// Health check endpoint</span>
+    router.<span class="function">GET</span>(<span class="string">"/health"</span>, <span class="keyword">func</span>(c *gin.Context) {
+        c.<span class="function">JSON</span>(200, gin.H{<span class="string">"status"</span>: <span class="string">"ok"</span>})
+    })
+
+    port := os.<span class="function">Getenv</span>(<span class="string">"PORT"</span>)
+    <span class="keyword">if</span> port == <span class="string">""</span> {
+        port = <span class="string">"8080"</span>
+    }
+
+    log.<span class="function">Printf</span>(<span class="string">"Server running on port %s"</span>, port)
+    <span class="keyword">if</span> <span class="keyword">err</span> := router.<span class="function">Run</span>(<span class="string">":"</span> + port); <span class="keyword">err</span> != nil {
+        log.<span class="function">Fatalf</span>(<span class="string">"Server failed to start: %v"</span>, <span class="keyword">err</span>)
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: entity/user.go -->
+            <div id="entity" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>internal/entity/user.go</h2>
+                <button class="copy-btn" onclick="copyFile('entity')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> entity
+
+<span class="keyword">import</span> (
+    <span class="string">"time"</span>
+)
+
+<span class="comment">// User represents the core domain model</span>
+<span class="comment">// It is framework-agnostic and contains only business logic</span>
+<span class="keyword">type</span> User <span class="keyword">struct</span> {
+    ID        int64
+    Name      string
+    Email     string
+    CreatedAt time.Time
+    UpdatedAt time.Time
+}
+
+<span class="comment">// CreateUserRequest is the request payload for creating a user</span>
+<span class="keyword">type</span> CreateUserRequest <span class="keyword">struct</span> {
+    Name  string `json:<span class="string">"name"</span> binding:<span class="string">"required,min=2,max=100"</span>`
+    Email string `json:<span class="string">"email"</span> binding:<span class="string">"required,email"</span>`
+}
+
+<span class="comment">// UpdateUserRequest is the request payload for updating a user</span>
+<span class="keyword">type</span> UpdateUserRequest <span class="keyword">struct</span> {
+    Name  string `json:<span class="string">"name"</span> binding:<span class="string">"required,min=2,max=100"</span>`
+    Email string `json:<span class="string">"email"</span> binding:<span class="string">"required,email"</span>`
+}
+
+<span class="comment">// Validate validates the user entity</span>
+<span class="keyword">func</span> (u *User) <span class="function">Validate</span>() error {
+    <span class="keyword">if</span> u.Name == <span class="string">""</span> {
+        <span class="keyword">return</span> ErrUserNameRequired
+    }
+    <span class="keyword">if</span> u.Email == <span class="string">""</span> {
+        <span class="keyword">return</span> ErrUserEmailRequired
+    }
+    <span class="keyword">return</span> nil
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: repository/user_repository.go -->
+            <div id="repo-interface" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>internal/repository/user_repository.go</h2>
+                <button class="copy-btn" onclick="copyFile('repo-interface')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> repository
+
+<span class="keyword">import</span> <span class="string">"github.com/yourname/go-setup/internal/entity"</span>
+
+<span class="comment">// UserRepository defines the contract for user data access</span>
+<span class="comment">// By using an interface, we decouple business logic from DB implementation</span>
+<span class="keyword">type</span> UserRepository <span class="keyword">interface</span> {
+    <span class="comment">// Create persists a new user and returns the ID</span>
+    <span class="function">Create</span>(user *entity.User) (<span class="keyword">int64</span>, error)
+    
+    <span class="comment">// GetByID retrieves a user by ID</span>
+    <span class="function">GetByID</span>(id <span class="keyword">int64</span>) (*entity.User, error)
+    
+    <span class="comment">// GetAll retrieves all users with pagination</span>
+    <span class="function">GetAll</span>(limit, offset <span class="keyword">int</span>) ([]*entity.User, error)
+    
+    <span class="comment">// Update modifies an existing user</span>
+    <span class="function">Update</span>(id <span class="keyword">int64</span>, user *entity.User) error
+    
+    <span class="comment">// Delete removes a user</span>
+    <span class="function">Delete</span>(id <span class="keyword">int64</span>) error
+    
+    <span class="comment">// GetByEmail checks if email exists (prevents duplicates)</span>
+    <span class="function">GetByEmail</span>(email string) (*entity.User, error)
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: postgres/user_repo.go -->
+            <div id="repo-postgres" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>internal/repository/postgres/user_repo.go</h2>
+                <button class="copy-btn" onclick="copyFile('repo-postgres')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> postgres
+
+<span class="keyword">import</span> (
+    <span class="string">"database/sql"</span>
+    <span class="string">"errors"</span>
+    <span class="string">"time"</span>
+    
+    <span class="string">"github.com/yourname/go-setup/internal/entity"</span>
+    <span class="string">"github.com/yourname/go-setup/pkg/errors"</span>
+)
+
+<span class="keyword">type</span> UserRepository <span class="keyword">struct</span> {
+    db *sql.DB
+}
+
+<span class="keyword">func</span> <span class="function">NewUserRepository</span>(db *sql.DB) *UserRepository {
+    <span class="keyword">return</span> &UserRepository{db: db}
+}
+
+<span class="keyword">func</span> (r *UserRepository) <span class="function">Create</span>(user *entity.User) (<span class="keyword">int64</span>, error) {
+    <span class="keyword">var</span> id <span class="keyword">int64</span>
+    
+    <span class="comment">// Parameterized query prevents SQL injection</span>
+    <span class="keyword">err</span> := r.db.<span class="function">QueryRow</span>(
+        <span class="string">"INSERT INTO users (name, email, created_at, updated_at) VALUES ($1, $2, $3, $4) RETURNING id"</span>,
+        user.Name,
+        user.Email,
+        time.Now(),
+        time.Now(),
+    ).<span class="function">Scan</span>(&id)
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> 0, errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    
+    <span class="keyword">return</span> id, nil
+}
+
+<span class="keyword">func</span> (r *UserRepository) <span class="function">GetByID</span>(id <span class="keyword">int64</span>) (*entity.User, error) {
+    user := &entity.User{}
+    
+    <span class="keyword">err</span> := r.db.<span class="function">QueryRow</span>(
+        <span class="string">"SELECT id, name, email, created_at, updated_at FROM users WHERE id = $1"</span>,
+        id,
+    ).<span class="function">Scan</span>(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> == sql.ErrNoRows {
+        <span class="keyword">return</span> nil, errors.ErrNotFound
+    }
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    
+    <span class="keyword">return</span> user, nil
+}
+
+<span class="keyword">func</span> (r *UserRepository) <span class="function">GetAll</span>(limit, offset <span class="keyword">int</span>) ([]*entity.User, error) {
+    <span class="keyword">rows</span>, <span class="keyword">err</span> := r.db.<span class="function">Query</span>(
+        <span class="string">"SELECT id, name, email, created_at, updated_at FROM users LIMIT $1 OFFSET $2"</span>,
+        limit,
+        offset,
+    )
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    <span class="keyword">defer</span> <span class="keyword">rows</span>.<span class="function">Close</span>()
+    
+    users := make([]*entity.User, 0)
+    
+    <span class="keyword">for</span> <span class="keyword">rows</span>.<span class="function">Next</span>() {
+        user := &entity.User{}
+        <span class="keyword">if</span> <span class="keyword">err</span> := <span class="keyword">rows</span>.<span class="function">Scan</span>(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt); <span class="keyword">err</span> != nil {
+            <span class="keyword">return</span> nil, errors.<span class="function">NewDatabaseError</span>(err)
+        }
+        users = <span class="keyword">append</span>(users, user)
+    }
+    
+    <span class="keyword">return</span> users, nil
+}
+
+<span class="keyword">func</span> (r *UserRepository) <span class="function">Update</span>(id <span class="keyword">int64</span>, user *entity.User) error {
+    result, <span class="keyword">err</span> := r.db.<span class="function">Exec</span>(
+        <span class="string">"UPDATE users SET name = $1, email = $2, updated_at = $3 WHERE id = $4"</span>,
+        user.Name,
+        user.Email,
+        time.Now(),
+        id,
+    )
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    
+    rowsAffected, <span class="keyword">err</span> := result.<span class="function">RowsAffected</span>()
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    
+    <span class="keyword">if</span> rowsAffected == 0 {
+        <span class="keyword">return</span> errors.ErrNotFound
+    }
+    
+    <span class="keyword">return</span> nil
+}
+
+<span class="keyword">func</span> (r *UserRepository) <span class="function">Delete</span>(id <span class="keyword">int64</span>) error {
+    result, <span class="keyword">err</span> := r.db.<span class="function">Exec</span>(
+        <span class="string">"DELETE FROM users WHERE id = $1"</span>,
+        id,
+    )
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    
+    rowsAffected, <span class="keyword">err</span> := result.<span class="function">RowsAffected</span>()
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    
+    <span class="keyword">if</span> rowsAffected == 0 {
+        <span class="keyword">return</span> errors.ErrNotFound
+    }
+    
+    <span class="keyword">return</span> nil
+}
+
+<span class="keyword">func</span> (r *UserRepository) <span class="function">GetByEmail</span>(email string) (*entity.User, error) {
+    user := &entity.User{}
+    
+    <span class="keyword">err</span> := r.db.<span class="function">QueryRow</span>(
+        <span class="string">"SELECT id, name, email, created_at, updated_at FROM users WHERE email = $1"</span>,
+        email,
+    ).<span class="function">Scan</span>(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> == sql.ErrNoRows {
+        <span class="keyword">return</span> nil, errors.ErrNotFound
+    }
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, errors.<span class="function">NewDatabaseError</span>(err)
+    }
+    
+    <span class="keyword">return</span> user, nil
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: usecase/user_usecase.go -->
+            <div id="usecase" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>internal/usecase/user_usecase.go</h2>
+                <button class="copy-btn" onclick="copyFile('usecase')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> usecase
+
+<span class="keyword">import</span> (
+    <span class="string">"github.com/yourname/go-setup/internal/entity"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/repository"</span>
+    <span class="string">"github.com/yourname/go-setup/pkg/errors"</span>
+)
+
+<span class="comment">// UserUsecase contains business logic for user operations</span>
+<span class="comment">// It depends on the repository interface, not concrete implementation</span>
+<span class="keyword">type</span> UserUsecase <span class="keyword">struct</span> {
+    userRepo repository.UserRepository
+}
+
+<span class="keyword">func</span> <span class="function">NewUserUsecase</span>(userRepo repository.UserRepository) *UserUsecase {
+    <span class="keyword">return</span> &UserUsecase{
+        userRepo: userRepo,
+    }
+}
+
+<span class="comment">// CreateUser validates and persists a new user</span>
+<span class="keyword">func</span> (uc *UserUsecase) <span class="function">CreateUser</span>(req *entity.CreateUserRequest) (*entity.User, error) {
+    <span class="comment">// Business logic: validate request</span>
+    <span class="keyword">if</span> req.Name == <span class="string">""</span> || req.Email == <span class="string">""</span> {
+        <span class="keyword">return</span> nil, errors.ErrValidation
+    }
+    
+    <span class="comment">// Check for duplicate email</span>
+    existing, <span class="keyword">err</span> := uc.userRepo.<span class="function">GetByEmail</span>(req.Email)
+    <span class="keyword">if</span> <span class="keyword">err</span> == nil {
+        <span class="keyword">return</span> nil, errors.<span class="function">NewError</span>(<span class="string">"email already exists"</span>, 409)
+    }
+    <span class="keyword">if</span> <span class="keyword">err</span> != errors.ErrNotFound {
+        <span class="keyword">return</span> nil, <span class="keyword">err</span>
+    }
+    
+    <span class="keyword">// Create user entity</span>
+    user := &entity.User{
+        Name:  req.Name,
+        Email: req.Email,
+    }
+    
+    <span class="comment">// Persist to database</span>
+    id, <span class="keyword">err</span> := uc.userRepo.<span class="function">Create</span>(user)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, <span class="keyword">err</span>
+    }
+    
+    user.ID = id
+    <span class="keyword">return</span> user, nil
+}
+
+<span class="comment">// GetUserByID retrieves a user by ID</span>
+<span class="keyword">func</span> (uc *UserUsecase) <span class="function">GetUserByID</span>(id <span class="keyword">int64</span>) (*entity.User, error) {
+    <span class="keyword">if</span> id <= 0 {
+        <span class="keyword">return</span> nil, errors.ErrValidation
+    }
+    
+    <span class="keyword">return</span> uc.userRepo.<span class="function">GetByID</span>(id)
+}
+
+<span class="comment">// GetUsers retrieves all users with pagination</span>
+<span class="keyword">func</span> (uc *UserUsecase) <span class="function">GetUsers</span>(limit, offset <span class="keyword">int</span>) ([]*entity.User, error) {
+    <span class="keyword">if</span> limit <= 0 || limit > 100 {
+        limit = 10
+    }
+    <span class="keyword">if</span> offset < 0 {
+        offset = 0
+    }
+    
+    <span class="keyword">return</span> uc.userRepo.<span class="function">GetAll</span>(limit, offset)
+}
+
+<span class="comment">// UpdateUser modifies an existing user</span>
+<span class="keyword">func</span> (uc *UserUsecase) <span class="function">UpdateUser</span>(id <span class="keyword">int64</span>, req *entity.UpdateUserRequest) (*entity.User, error) {
+    <span class="keyword">if</span> id <= 0 {
+        <span class="keyword">return</span> nil, errors.ErrValidation
+    }
+    
+    <span class="comment">// Verify user exists</span>
+    user, <span class="keyword">err</span> := uc.userRepo.<span class="function">GetByID</span>(id)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, <span class="keyword">err</span>
+    }
+    
+    user.Name = req.Name
+    user.Email = req.Email
+    
+    <span class="keyword">err</span> = uc.userRepo.<span class="function">Update</span>(id, user)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, <span class="keyword">err</span>
+    }
+    
+    <span class="keyword">return</span> user, nil
+}
+
+<span class="comment">// DeleteUser removes a user</span>
+<span class="keyword">func</span> (uc *UserUsecase) <span class="function">DeleteUser</span>(id <span class="keyword">int64</span>) error {
+    <span class="keyword">if</span> id <= 0 {
+        <span class="keyword">return</span> errors.ErrValidation
+    }
+    
+    <span class="keyword">return</span> uc.userRepo.<span class="function">Delete</span>(id)
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: handler/user_handler.go -->
+            <div id="handler" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>internal/delivery/http/user_handler.go</h2>
+                <button class="copy-btn" onclick="copyFile('handler')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> http
+
+<span class="keyword">import</span> (
+    <span class="string">"log"</span>
+    <span class="string">"strconv"</span>
+    
+    <span class="string">"github.com/gin-gonic/gin"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/entity"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/usecase"</span>
+    <span class="string">"github.com/yourname/go-setup/pkg/errors"</span>
+    <span class="string">"github.com/yourname/go-setup/pkg/response"</span>
+)
+
+<span class="keyword">type</span> UserHandler <span class="keyword">struct</span> {
+    userUC *usecase.UserUsecase
+}
+
+<span class="keyword">func</span> <span class="function">NewUserHandler</span>(userUC *usecase.UserUsecase) *UserHandler {
+    <span class="keyword">return</span> &UserHandler{
+        userUC: userUC,
+    }
+}
+
+<span class="comment">// CreateUser handles POST /users</span>
+<span class="keyword">func</span> (h *UserHandler) <span class="function">CreateUser</span>(c *gin.Context) {
+    <span class="keyword">var</span> req entity.CreateUserRequest
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> := c.<span class="function">ShouldBindJSON</span>(&req); <span class="keyword">err</span> != nil {
+        response.<span class="function">Error</span>(c, 400, <span class="string">"Invalid request body"</span>)
+        <span class="keyword">return</span>
+    }
+    
+    user, <span class="keyword">err</span> := h.userUC.<span class="function">CreateUser</span>(&req)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        h.<span class="function">handleError</span>(c, <span class="keyword">err</span>)
+        <span class="keyword">return</span>
+    }
+    
+    response.<span class="function">Success</span>(c, 201, <span class="string">"User created successfully"</span>, user)
+}
+
+<span class="comment">// GetUserByID handles GET /users/:id</span>
+<span class="keyword">func</span> (h *UserHandler) <span class="function">GetUserByID</span>(c *gin.Context) {
+    id, <span class="keyword">err</span> := strconv.<span class="function">ParseInt</span>(c.<span class="function">Param</span>(<span class="string">"id"</span>), 10, 64)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        response.<span class="function">Error</span>(c, 400, <span class="string">"Invalid user ID"</span>)
+        <span class="keyword">return</span>
+    }
+    
+    user, <span class="keyword">err</span> := h.userUC.<span class="function">GetUserByID</span>(id)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        h.<span class="function">handleError</span>(c, <span class="keyword">err</span>)
+        <span class="keyword">return</span>
+    }
+    
+    response.<span class="function">Success</span>(c, 200, <span class="string">"User retrieved successfully"</span>, user)
+}
+
+<span class="comment">// GetUsers handles GET /users?limit=10&offset=0</span>
+<span class="keyword">func</span> (h *UserHandler) <span class="function">GetUsers</span>(c *gin.Context) {
+    limit, _ := strconv.<span class="function">Atoi</span>(c.<span class="function">DefaultQuery</span>(<span class="string">"limit"</span>, <span class="string">"10"</span>))
+    offset, _ := strconv.<span class="function">Atoi</span>(c.<span class="function">DefaultQuery</span>(<span class="string">"offset"</span>, <span class="string">"0"</span>))
+    
+    users, <span class="keyword">err</span> := h.userUC.<span class="function">GetUsers</span>(limit, offset)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        h.<span class="function">handleError</span>(c, <span class="keyword">err</span>)
+        <span class="keyword">return</span>
+    }
+    
+    response.<span class="function">Success</span>(c, 200, <span class="string">"Users retrieved successfully"</span>, users)
+}
+
+<span class="comment">// UpdateUser handles PUT /users/:id</span>
+<span class="keyword">func</span> (h *UserHandler) <span class="function">UpdateUser</span>(c *gin.Context) {
+    id, <span class="keyword">err</span> := strconv.<span class="function">ParseInt</span>(c.<span class="function">Param</span>(<span class="string">"id"</span>), 10, 64)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        response.<span class="function">Error</span>(c, 400, <span class="string">"Invalid user ID"</span>)
+        <span class="keyword">return</span>
+    }
+    
+    <span class="keyword">var</span> req entity.UpdateUserRequest
+    <span class="keyword">if</span> <span class="keyword">err</span> := c.<span class="function">ShouldBindJSON</span>(&req); <span class="keyword">err</span> != nil {
+        response.<span class="function">Error</span>(c, 400, <span class="string">"Invalid request body"</span>)
+        <span class="keyword">return</span>
+    }
+    
+    user, <span class="keyword">err</span> := h.userUC.<span class="function">UpdateUser</span>(id, &req)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        h.<span class="function">handleError</span>(c, <span class="keyword">err</span>)
+        <span class="keyword">return</span>
+    }
+    
+    response.<span class="function">Success</span>(c, 200, <span class="string">"User updated successfully"</span>, user)
+}
+
+<span class="comment">// DeleteUser handles DELETE /users/:id</span>
+<span class="keyword">func</span> (h *UserHandler) <span class="function">DeleteUser</span>(c *gin.Context) {
+    id, <span class="keyword">err</span> := strconv.<span class="function">ParseInt</span>(c.<span class="function">Param</span>(<span class="string">"id"</span>), 10, 64)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        response.<span class="function">Error</span>(c, 400, <span class="string">"Invalid user ID"</span>)
+        <span class="keyword">return</span>
+    }
+    
+    <span class="keyword">if</span> <span class="keyword">err</span> := h.userUC.<span class="function">DeleteUser</span>(id); <span class="keyword">err</span> != nil {
+        h.<span class="function">handleError</span>(c, <span class="keyword">err</span>)
+        <span class="keyword">return</span>
+    }
+    
+    response.<span class="function">Success</span>(c, 200, <span class="string">"User deleted successfully"</span>, nil)
+}
+
+<span class="comment">// handleError converts business errors to HTTP responses</span>
+<span class="keyword">func</span> (h *UserHandler) <span class="function">handleError</span>(c *gin.Context, <span class="keyword">err</span> error) {
+    code, msg := errors.<span class="function">ToHTTP</span>(<span class="keyword">err</span>)
+    response.<span class="function">Error</span>(c, code, msg)
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: config/config.go -->
+            <div id="config" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>internal/config/config.go</h2>
+                <button class="copy-btn" onclick="copyFile('config')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> config
+
+<span class="keyword">import</span> (
+    <span class="string">"log"</span>
+    <span class="string">"os"</span>
+)
+
+<span class="keyword">type</span> Config <span class="keyword">struct</span> {
+    DBHost     string
+    DBPort     string
+    DBUser     string
+    DBPassword string
+    DBName     string
+    DBSSLMode  string
+    GinMode    string
+    Port       string
+}
+
+<span class="keyword">func</span> <span class="function">Load</span>() *Config {
+    cfg := &Config{
+        DBHost:     getEnv(<span class="string">"DB_HOST"</span>, <span class="string">"localhost"</span>),
+        DBPort:     getEnv(<span class="string">"DB_PORT"</span>, <span class="string">"5432"</span>),
+        DBUser:     getEnv(<span class="string">"DB_USER"</span>, <span class="string">"postgres"</span>),
+        DBPassword: getEnv(<span class="string">"DB_PASSWORD"</span>, <span class="string">"postgres"</span>),
+        DBName:     getEnv(<span class="string">"DB_NAME"</span>, <span class="string">"go_setup_db"</span>),
+        DBSSLMode:  getEnv(<span class="string">"DB_SSLMODE"</span>, <span class="string">"disable"</span>),
+        GinMode:    getEnv(<span class="string">"GIN_MODE"</span>, <span class="string">"debug"</span>),
+        Port:       getEnv(<span class="string">"PORT"</span>, <span class="string">"8080"</span>),
+    }
+    
+    log.<span class="function">Printf</span>(<span class="string">"Config loaded: DB=%s:%s/%s, Port=%s"</span>, cfg.DBHost, cfg.DBPort, cfg.DBName, cfg.Port)
+    
+    <span class="keyword">return</span> cfg
+}
+
+<span class="keyword">func</span> <span class="function">getEnv</span>(key, defaultVal string) string {
+    <span class="keyword">if</span> value := os.<span class="function">Getenv</span>(key); value != <span class="string">""</span> {
+        <span class="keyword">return</span> value
+    }
+    <span class="keyword">return</span> defaultVal
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: database/database.go -->
+            <div id="database" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>internal/database/database.go</h2>
+                <button class="copy-btn" onclick="copyFile('database')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> database
+
+<span class="keyword">import</span> (
+    <span class="string">"database/sql"</span>
+    <span class="string">"fmt"</span>
+    <span class="string">"log"</span>
+    <span class="string">"time"</span>
+    
+    _ <span class="string">"github.com/lib/pq"</span>
+    
+    <span class="string">"github.com/yourname/go-setup/internal/config"</span>
+)
+
+<span class="keyword">func</span> <span class="function">NewConnection</span>(cfg *config.Config) (*sql.DB, error) {
+    dsn := fmt.<span class="function">Sprintf</span>(
+        <span class="string">"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s"</span>,
+        cfg.DBHost,
+        cfg.DBPort,
+        cfg.DBUser,
+        cfg.DBPassword,
+        cfg.DBName,
+        cfg.DBSSLMode,
+    )
+    
+    db, <span class="keyword">err</span> := sql.<span class="function">Open</span>(<span class="string">"postgres"</span>, dsn)
+    <span class="keyword">if</span> <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, fmt.<span class="function">Errorf</span>(<span class="string">"failed to open database: %w"</span>, <span class="keyword">err</span>)
+    }
+    
+    <span class="comment">// Test connection</span>
+    <span class="keyword">if</span> <span class="keyword">err</span> := db.<span class="function">Ping</span>(); <span class="keyword">err</span> != nil {
+        <span class="keyword">return</span> nil, fmt.<span class="function">Errorf</span>(<span class="string">"failed to ping database: %w"</span>, <span class="keyword">err</span>)
+    }
+    
+    <span class="comment">// Connection pooling configuration</span>
+    db.<span class="function">SetMaxOpenConns</span>(25)
+    db.<span class="function">SetMaxIdleConns</span>(5)
+    db.<span class="function">SetConnMaxLifetime</span>(5 * time.Minute)
+    
+    log.<span class="function">Println</span>(<span class="string">"Database connection established"</span>)
+    
+    <span class="keyword">return</span> db, nil
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: errors/errors.go -->
+            <div id="errors" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>pkg/errors/errors.go</h2>
+                <button class="copy-btn" onclick="copyFile('errors')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> errors
+
+<span class="keyword">import</span> <span class="string">"fmt"</span>
+
+<span class="keyword">type</span> AppError <span class="keyword">struct</span> {
+    Message string
+    Code    <span class="keyword">int</span>
+}
+
+<span class="keyword">func</span> (e *AppError) <span class="function">Error</span>() string {
+    <span class="keyword">return</span> e.Message
+}
+
+<span class="keyword">var</span> (
+    ErrNotFound       = &AppError{<span class="string">"Resource not found"</span>, 404}
+    ErrValidation     = &AppError{<span class="string">"Validation failed"</span>, 400}
+    ErrUnauthorized   = &AppError{<span class="string">"Unauthorized"</span>, 401}
+    ErrForbidden      = &AppError{<span class="string">"Forbidden"</span>, 403}
+    ErrConflict       = &AppError{<span class="string">"Conflict"</span>, 409}
+    ErrInternalServer = &AppError{<span class="string">"Internal server error"</span>, 500}
+    
+    ErrUserNameRequired  = &AppError{<span class="string">"User name is required"</span>, 400}
+    ErrUserEmailRequired = &AppError{<span class="string">"User email is required"</span>, 400}
+)
+
+<span class="keyword">func</span> <span class="function">NewError</span>(message string, code <span class="keyword">int</span>) error {
+    <span class="keyword">return</span> &AppError{message, code}
+}
+
+<span class="keyword">func</span> <span class="function">NewDatabaseError</span>(err error) error {
+    <span class="keyword">return</span> &AppError{
+        Message: fmt.<span class="function">Sprintf</span>(<span class="string">"Database error: %v"</span>, err),
+        Code:    500,
+    }
+}
+
+<span class="keyword">func</span> <span class="function">ToHTTP</span>(err error) (<span class="keyword">int</span>, string) {
+    <span class="keyword">if</span> appErr, ok := err.(*AppError); ok {
+        <span class="keyword">return</span> appErr.Code, appErr.Message
+    }
+    <span class="keyword">return</span> 500, <span class="string">"Internal server error"</span>
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: response/response.go -->
+            <div id="response" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>pkg/response/response.go</h2>
+                <button class="copy-btn" onclick="copyFile('response')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> response
+
+<span class="keyword">import</span> (
+    <span class="string">"github.com/gin-gonic/gin"</span>
+)
+
+<span class="keyword">type</span> Response <span class="keyword">struct</span> {
+    Success <span class="keyword">bool</span>        `json:<span class="string">"success"</span>`
+    Message string      `json:<span class="string">"message"</span>`
+    Data    interface{} `json:<span class="string">"data,omitempty"</span>`
+    Error   string      `json:<span class="string">"error,omitempty"</span>`
+}
+
+<span class="keyword">func</span> <span class="function">Success</span>(c *gin.Context, code <span class="keyword">int</span>, message string, data interface{}) {
+    c.<span class="function">JSON</span>(code, Response{
+        Success: true,
+        Message: message,
+        Data:    data,
+    })
+}
+
+<span class="keyword">func</span> <span class="function">Error</span>(c *gin.Context, code <span class="keyword">int</span>, message string) {
+    c.<span class="function">JSON</span>(code, Response{
+        Success: false,
+        Message: message,
+        Error:   message,
+    })
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: handler_test.go -->
+            <div id="handler-test" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>tests/unit/user_handler_test.go</h2>
+                <button class="copy-btn" onclick="copyFile('handler-test')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> unit
+
+<span class="keyword">import</span> (
+    <span class="string">"bytes"</span>
+    <span class="string">"encoding/json"</span>
+    <span class="string">"net/http"</span>
+    <span class="string">"net/http/httptest"</span>
+    <span class="string">"testing"</span>
+    
+    <span class="string">"github.com/gin-gonic/gin"</span>
+    <span class="string">"github.com/stretchr/testify/assert"</span>
+    
+    <span class="string">"github.com/yourname/go-setup/internal/entity"</span>
+    <span class="string">"github.com/yourname/go-setup/internal/delivery/http"</span>
+    <span class="string">"github.com/yourname/go-setup/tests/mocks"</span>
+)
+
+<span class="keyword">func</span> <span class="function">TestCreateUserHandler</span>(t *testing.T) {
+    <span class="comment">// Table-driven test approach</span>
+    tests := []<span class="keyword">struct</span> {
+        name           string
+        request        entity.CreateUserRequest
+        expectedStatus <span class="keyword">int</span>
+        expectError    <span class="keyword">bool</span>
+    }{
+        {
+            name:           <span class="string">"Success"</span>,
+            request:        entity.CreateUserRequest{Name: <span class="string">"John"</span>, Email: <span class="string">"john@example.com"</span>},
+            expectedStatus: 201,
+            expectError:    false,
+        },
+        {
+            name:           <span class="string">"Empty Name"</span>,
+            request:        entity.CreateUserRequest{Name: <span class="string">""</span>, Email: <span class="string">"john@example.com"</span>},
+            expectedStatus: 400,
+            expectError:    true,
+        },
+        {
+            name:           <span class="string">"Invalid Email"</span>,
+            request:        entity.CreateUserRequest{Name: <span class="string">"John"</span>, Email: <span class="string">"invalid"</span>},
+            expectedStatus: 400,
+            expectError:    true,
+        },
+    }
+    
+    <span class="keyword">for</span> _, tt := <span class="keyword">range</span> tests {
+        t.<span class="function">Run</span>(tt.name, <span class="keyword">func</span>(t *testing.T) {
+            <span class="comment">// Setup</span>
+            mockRepo := mocks.<span class="function">NewMockUserRepository</span>()
+            mockUC := usecase.<span class="function">NewUserUsecase</span>(mockRepo)
+            handler := http.<span class="function">NewUserHandler</span>(mockUC)
+            
+            <span class="comment">// Create request</span>
+            body, _ := json.<span class="function">Marshal</span>(tt.request)
+            req := httptest.<span class="function">NewRequest</span>(http.MethodPost, <span class="string">"/api/users"</span>, bytes.<span class="function">NewBuffer</span>(body))
+            req.Header.<span class="function">Set</span>(<span class="string">"Content-Type"</span>, <span class="string">"application/json"</span>)
+            
+            <span class="comment">// Record response</span>
+            recorder := httptest.<span class="function">NewRecorder</span>()
+            gin.SetMode(gin.TestMode)
+            router := gin.<span class="function">New</span>()
+            router.<span class="function">POST</span>(<span class="string">"/api/users"</span>, handler.CreateUser)
+            
+            router.<span class="function">ServeHTTP</span>(recorder, req)
+            
+            <span class="comment">// Assert</span>
+            assert.<span class="function">Equal</span>(t, tt.expectedStatus, recorder.Code)
+        })
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: mock_user_repo.go -->
+            <div id="mock" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>tests/mocks/mock_user_repo.go</h2>
+                <button class="copy-btn" onclick="copyFile('mock')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">package</span> mocks
+
+<span class="keyword">import</span> (
+    <span class="string">"sync"</span>
+    <span class="string">"time"</span>
+    
+    <span class="string">"github.com/yourname/go-setup/internal/entity"</span>
+    <span class="string">"github.com/yourname/go-setup/pkg/errors"</span>
+)
+
+<span class="comment">// MockUserRepository implements the UserRepository interface for testing</span>
+<span class="keyword">type</span> MockUserRepository <span class="keyword">struct</span> {
+    users map[<span class="keyword">int64</span>]*entity.User
+    mutex sync.RWMutex
+    nextID <span class="keyword">int64</span>
+}
+
+<span class="keyword">func</span> <span class="function">NewMockUserRepository</span>() *MockUserRepository {
+    <span class="keyword">return</span> &MockUserRepository{
+        users:  make(map[<span class="keyword">int64</span>]*entity.User),
+        nextID: 1,
+    }
+}
+
+<span class="keyword">func</span> (m *MockUserRepository) <span class="function">Create</span>(user *entity.User) (<span class="keyword">int64</span>, error) {
+    m.mutex.<span class="function">Lock</span>()
+    <span class="keyword">defer</span> m.mutex.<span class="function">Unlock</span>()
+    
+    user.ID = m.nextID
+    user.CreatedAt = time.<span class="function">Now</span>()
+    user.UpdatedAt = time.<span class="function">Now</span>()
+    
+    m.users[user.ID] = user
+    m.nextID++
+    
+    <span class="keyword">return</span> user.ID, nil
+}
+
+<span class="keyword">func</span> (m *MockUserRepository) <span class="function">GetByID</span>(id <span class="keyword">int64</span>) (*entity.User, error) {
+    m.mutex.<span class="function">RLock</span>()
+    <span class="keyword">defer</span> m.mutex.<span class="function">RUnlock</span>()
+    
+    user, exists := m.users[id]
+    <span class="keyword">if</span> !exists {
+        <span class="keyword">return</span> nil, errors.ErrNotFound
+    }
+    
+    <span class="keyword">return</span> user, nil
+}
+
+<span class="keyword">func</span> (m *MockUserRepository) <span class="function">GetAll</span>(limit, offset <span class="keyword">int</span>) ([]*entity.User, error) {
+    m.mutex.<span class="function">RLock</span>()
+    <span class="keyword">defer</span> m.mutex.<span class="function">RUnlock</span>()
+    
+    result := make([]*entity.User, 0)
+    <span class="keyword">for</span> _, user := <span class="keyword">range</span> m.users {
+        result = <span class="keyword">append</span>(result, user)
+    }
+    
+    <span class="keyword">return</span> result, nil
+}
+
+<span class="keyword">func</span> (m *MockUserRepository) <span class="function">Update</span>(id <span class="keyword">int64</span>, user *entity.User) error {
+    m.mutex.<span class="function">Lock</span>()
+    <span class="keyword">defer</span> m.mutex.<span class="function">Unlock</span>()
+    
+    _, exists := m.users[id]
+    <span class="keyword">if</span> !exists {
+        <span class="keyword">return</span> errors.ErrNotFound
+    }
+    
+    user.ID = id
+    user.UpdatedAt = time.<span class="function">Now</span>()
+    m.users[id] = user
+    
+    <span class="keyword">return</span> nil
+}
+
+<span class="keyword">func</span> (m *MockUserRepository) <span class="function">Delete</span>(id <span class="keyword">int64</span>) error {
+    m.mutex.<span class="function">Lock</span>()
+    <span class="keyword">defer</span> m.mutex.<span class="function">Unlock</span>()
+    
+    _, exists := m.users[id]
+    <span class="keyword">if</span> !exists {
+        <span class="keyword">return</span> errors.ErrNotFound
+    }
+    
+    <span class="keyword">delete</span>(m.users, id)
+    <span class="keyword">return</span> nil
+}
+
+<span class="keyword">func</span> (m *MockUserRepository) <span class="function">GetByEmail</span>(email string) (*entity.User, error) {
+    m.mutex.<span class="function">RLock</span>()
+    <span class="keyword">defer</span> m.mutex.<span class="function">RUnlock</span>()
+    
+    <span class="keyword">for</span> _, user := <span class="keyword">range</span> m.users {
+        <span class="keyword">if</span> user.Email == email {
+            <span class="keyword">return</span> user, nil
+        }
+    }
+    
+    <span class="keyword">return</span> nil, errors.ErrNotFound
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- File: migration.sql -->
+            <div id="migration" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>migrations/001_create_users_table.sql</h2>
+                <button class="copy-btn" onclick="copyFile('migration')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="comment">-- Create users table
+-- Migration: Create initial users table for the application</span>
+
+<span class="keyword">CREATE TABLE IF NOT EXISTS</span> users (
+    id <span class="keyword">SERIAL PRIMARY KEY</span>,
+    name <span class="keyword">VARCHAR</span>(100) <span class="keyword">NOT NULL</span>,
+    email <span class="keyword">VARCHAR</span>(255) <span class="keyword">NOT NULL UNIQUE</span>,
+    created_at <span class="keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>,
+    updated_at <span class="keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>
+);
+
+<span class="comment">-- Create index on email for faster lookups</span>
+<span class="keyword">CREATE INDEX IF NOT EXISTS</span> idx_users_email <span class="keyword">ON</span> users(email);
+
+<span class="comment">-- Create index on created_at for sorting</span>
+<span class="keyword">CREATE INDEX IF NOT EXISTS</span> idx_users_created_at <span class="keyword">ON</span> users(created_at <span class="keyword">DESC</span>);</code></pre>
+              </div>
+            </div>
+
+            <!-- File: Makefile -->
+            <div id="makefile" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>Makefile</h2>
+                <button class="copy-btn" onclick="copyFile('makefile')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="comment">.PHONY: help build run test clean docker-build docker-run migrate</span>
+
+<span class="string">help:</span>
+	@echo <span class="string">"Available commands:"</span>
+	@echo <span class="string">"  make build       - Build the application"</span>
+	@echo <span class="string">"  make run         - Run the application"</span>
+	@echo <span class="string">"  make test        - Run tests"</span>
+	@echo <span class="string">"  make test-coverage - Run tests with coverage"</span>
+	@echo <span class="string">"  make clean       - Clean build artifacts"</span>
+	@echo <span class="string">"  make migrate     - Run database migrations"</span>
+	@echo <span class="string">"  make docker-build - Build Docker image"</span>
+	@echo <span class="string">"  make docker-run  - Run Docker container"</span>
+
+<span class="string">build:</span>
+	go build -o bin/go-setup cmd/main.go
+
+<span class="string">run:</span>
+	go run cmd/main.go
+
+<span class="string">test:</span>
+	GIN_MODE=test go test ./tests/unit/... -v
+
+<span class="string">test-coverage:</span>
+	GIN_MODE=test go test ./tests/unit/... -v -coverprofile=coverage.out
+	go tool cover -html=coverage.out
+
+<span class="string">clean:</span>
+	rm -f bin/go-setup
+	rm -f coverage.out
+
+<span class="string">migrate:</span>
+	psql -h localhost -U postgres -d go_setup_db -f migrations/001_create_users_table.sql
+
+<span class="string">docker-compose-up:</span>
+	docker-compose up -d
+
+<span class="string">docker-compose-down:</span>
+	docker-compose down
+
+<span class="string">docker-build:</span>
+	docker build -t go-setup:latest .
+
+<span class="string">docker-run:</span>
+	docker run -p 8080:8080 --network go-setup_default go-setup:latest</code></pre>
+              </div>
+            </div>
+
+            <!-- File: docker-compose.yml -->
+            <div id="docker-compose" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>docker-compose.yml</h2>
+                <button class="copy-btn" onclick="copyFile('docker-compose')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">version</span>: <span class="string">'3.8'</span>
+
+<span class="keyword">services</span>:
+  <span class="keyword">postgres</span>:
+    <span class="keyword">image</span>: postgres:15
+    <span class="keyword">container_name</span>: go-setup-postgres
+    <span class="keyword">environment</span>:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: go_setup_db
+    <span class="keyword">ports</span>:
+      - <span class="string">"5432:5432"</span>
+    <span class="keyword">volumes</span>:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    <span class="keyword">healthcheck</span>:
+      <span class="keyword">test</span>: [<span class="string">"CMD-SHELL"</span>, <span class="string">"pg_isready -U postgres"</span>]
+      <span class="keyword">interval</span>: 10s
+      <span class="keyword">timeout</span>: 5s
+      <span class="keyword">retries</span>: 5
+    <span class="keyword">networks</span>:
+      - go-setup-network
+
+  <span class="keyword">pgadmin</span>:
+    <span class="keyword">image</span>: dpage/pgadmin4:latest
+    <span class="keyword">container_name</span>: go-setup-pgadmin
+    <span class="keyword">environment</span>:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    <span class="keyword">ports</span>:
+      - <span class="string">"5050:80"</span>
+    <span class="keyword">depends_on</span>:
+      - postgres
+    <span class="keyword">networks</span>:
+      - go-setup-network
+
+<span class="keyword">volumes</span>:
+  postgres_data:
+
+<span class="keyword">networks</span>:
+  go-setup-network:
+    <span class="keyword">driver</span>: bridge</code></pre>
+              </div>
+            </div>
+
+            <!-- File: go.mod -->
+            <div id="gomod" class="file-view" style="display: none">
+              <div class="file-header">
+                <h2>go.mod</h2>
+                <button class="copy-btn" onclick="copyFile('gomod')">
+                  Copy
+                </button>
+              </div>
+              <div class="file-content">
+                <pre><code><span class="keyword">module</span> github.com/yourname/go-setup
+
+<span class="keyword">go</span> 1.21
+
+<span class="keyword">require</span> (
+    github.com/gin-gonic/gin v1.9.1
+    github.com/lib/pq v1.10.9
+    github.com/joho/godotenv v1.5.1
+    github.com/stretchr/testify v1.8.4
+)</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTING TAB -->
+      <div id="testing" class="section">
+        <h2>Unit Testing Guide</h2>
+
+        <div class="highlight-section">
+          <strong>Testing Strategy</strong>
+          <p style="margin-top: 10px">
+            Follow the Arrange-Act-Assert (AAA) pattern for clean, readable
+            tests:
+          </p>
+          <ul style="margin-left: 20px; margin-top: 10px">
+            <li>
+              <strong>Arrange:</strong> Set up test data and dependencies
+              (mocks)
+            </li>
+            <li>
+              <strong>Act:</strong> Execute the function/method being tested
+            </li>
+            <li>
+              <strong>Assert:</strong> Verify the results match expectations
+            </li>
+          </ul>
+        </div>
+
+        <h3>Test Files to Create</h3>
+
+        <h4>1. Unit Test for Handler (tests/unit/user_handler_test.go)</h4>
+        <pre><code><span class="comment">// Test each HTTP endpoint with multiple scenarios:</span>
+<span class="comment">// ✓ Happy path (valid input)</span>
+<span class="comment">// ✓ Invalid input (validation errors)</span>
+<span class="comment">// ✓ Not found (404)</span>
+<span class="comment">// ✓ Server errors (500)</span>
+
+<span class="comment">// Use table-driven tests for multiple scenarios</span>
+<span class="comment">// Use httptest.NewRecorder() to capture HTTP responses</span>
+<span class="comment">// Use testify/assert for clean assertions</span></code></pre>
+
+        <h4>2. Unit Test for Use Case (tests/unit/user_usecase_test.go)</h4>
+        <pre><code><span class="comment">// Test business logic without HTTP layer:
+// ✓ CreateUser - validation, duplicate email check, persistence
+// ✓ GetUserByID - valid ID, invalid ID, non-existent ID
+// ✓ UpdateUser - successful update, non-existent user
+// ✓ DeleteUser - successful deletion, non-existent user
+
+// Use mock repository (MockUserRepository from mocks/)
+// Tests should not depend on actual database</span></code></pre>
+
+        <h4>3. Mock Repository (tests/mocks/mock_user_repo.go)</h4>
+        <pre><code><span class="comment">// In-memory implementation of UserRepository interface
+// Allows testing use cases without database dependency
+// Provides isolation for unit tests
+// All methods already implemented in provided code</span></code></pre>
+
+        <h3>Running Tests</h3>
+        <div class="command-box">
+          <span class="comment"># Run all unit tests with verbose output</span>
+          $ go test ./tests/unit/... -v
+
+          <span class="comment"># Run with coverage report</span>
+          $ go test ./tests/unit/... -v -cover
+
+          <span class="comment"># Generate HTML coverage report</span>
+          $ go test ./tests/unit/... -coverprofile=coverage.out $ go tool cover
+          -html=coverage.out
+
+          <span class="comment"># Run specific test</span>
+          $ go test -run TestCreateUserHandler ./tests/unit/...
+
+          <span class="comment"
+            ># Run with timeout (prevent infinite loops)</span
+          >
+          $ go test -timeout 10s ./tests/unit/...
+        </div>
+
+        <h3>Test Coverage Goals</h3>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>Handler Layer</h3>
+            <p>
+              50-70% coverage. Focus on valid inputs, validation errors, and
+              error handling.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Use Case Layer</h3>
+            <p>
+              80%+ coverage. Test all business logic paths including edge cases.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Repository Layer</h3>
+            <p>
+              Test with actual database in integration tests (not unit tests).
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Error Handling</h3>
+            <p>Test all error scenarios and HTTP status code mappings.</p>
+          </div>
+        </div>
+
+        <div class="interview-tips">
+          <h3>💡 Testing Best Practices to Mention</h3>
+          <ul>
+            <li>
+              <strong>Isolation:</strong> Each unit test should be independent
+              and not depend on external services
+            </li>
+            <li>
+              <strong>Mocking:</strong> Mock dependencies to isolate the code
+              under test (dependency injection enables this)
+            </li>
+            <li>
+              <strong>Table-driven tests:</strong> Test multiple scenarios with
+              minimal code duplication
+            </li>
+            <li>
+              <strong>Assertion libraries:</strong> Use testify/assert for
+              clear, readable assertions
+            </li>
+            <li>
+              <strong>Test coverage:</strong> Aim for 80%+ on business logic,
+              50%+ on handlers
+            </li>
+            <li>
+              <strong>Error scenarios:</strong> Always test unhappy paths
+              (errors, validation failures, edge cases)
+            </li>
+            <li>
+              <strong>Continuous testing:</strong> Run tests in CI/CD pipeline
+              on every commit
+            </li>
+            <li>
+              <strong>Performance:</strong> Tests should run in <5s total (or
+              <100ms per test)
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function switchTab(tabName) {
+        // Hide all sections
+        const sections = document.querySelectorAll(".section");
+        sections.forEach((section) => section.classList.remove("active"));
+
+        // Remove active class from all buttons
+        const buttons = document.querySelectorAll(".tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        // Show selected section
+        document.getElementById(tabName).classList.add("active");
+
+        // Add active class to clicked button
+        event.target.classList.add("active");
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+      }
+
+      function showFile(fileId) {
+        // Hide all file views
+        const fileViews = document.querySelectorAll(".file-view");
+        fileViews.forEach((view) => (view.style.display = "none"));
+
+        // Update sidebar button states
+        const buttons = document.querySelectorAll(".file-nav button");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        // Show selected file
+        document.getElementById(fileId).style.display = "block";
+
+        // Update button state
+        event.target.classList.add("active");
+      }
+
+      function copyFile(fileId) {
+        const fileContent = document
+          .getElementById(fileId)
+          .querySelector("pre code").innerText;
+
+        navigator.clipboard.writeText(fileContent).then(() => {
+          const button = event.target;
+          const originalText = button.innerText;
+          button.innerText = "✓ Copied!";
+          button.classList.add("copied");
+
+          setTimeout(() => {
+            button.innerText = originalText;
+            button.classList.remove("copied");
+          }, 2000);
+        });
+      }
+    </script>
+  </body>
+</html>
